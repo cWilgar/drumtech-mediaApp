@@ -1,0 +1,45 @@
+
+body{
+
+}
+
+#contentsWrapper
+{
+	width: 80%;
+	margin: auto;
+	background-color: #D4FFAA;
+	padding: 5px;
+}
+#contentsWrapper:after
+{
+	content: "";
+	clear:both;
+	display: block;
+}
+#mainBlock{
+	float: left;
+	width: 75%;
+}
+	#mainContents{
+		width: 100%;
+		min-height: 200px;
+	}
+#sideBlock{
+	float: left;
+	width: 25%;
+}
+
+.tabs{
+	width: 100%;
+	text-align: center;
+}
+.tabs .tab{
+	display: inline-block;
+	margin: 2px 0px;
+	background-color: #FFD4FF;
+	padding: 2px;
+}
+
+input#searchBlock{
+	width: 100%;
+}
