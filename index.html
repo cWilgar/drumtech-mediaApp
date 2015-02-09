@@ -14,47 +14,73 @@
   	</head>
 	<body ng-app="mediaApp" ng-controller="mediaController">
 		<div id="contentsWrapper">
-			<div id="mainBlock">
+			<div id="mainBlock" style="">
 
 			    <ul class="nav nav-tabs">
 			        
-			        <li ng-repeat="tab in tabs" class="{{isActiveTab(tab.url)}}" >
-			        	<a href="" class="tab" ng-click="onClickTab(tab)" >	{{tab.title}} </a>
+			        <li ng-repeat="tab in tabs" ng-class="isActiveTab(tab.strMainUrl)" >
+			        	<a href="" class="tab" ng-click="debugger; onClickTab(tab)" >	{{tab.strTitle}} </a>
 	            	</li>
 			    </ul>
 
 			    <div id="mainContents">
 
-			        <div ng-include="currentPage"></div>
+			        <div ng-include="currentPage.strMainUrl"></div>
 
 			        <script type="text/ng-template" id="login.html">
-
-			        	<input ng-model="username" type="text" placeholder="Username" class="form-control"></input>
-			        	<input ng-model="password" type="password" placeholder="Passowrd" class="form-control"></input>
-			        	<br/>
-			        	<button class="btn btn-default" ng-click="onLoginClick(username, password)">login</button><br/>
-						<br/>
-						<button class="btn btn-default" onclick="">register</button>
-
+		        		<div class="loginBlock">
+		        			<p>You need to Login.</p>
+				        	<input ng-model="username" type="text" placeholder="Username" class="form-control"></input>
+				        	<br/>
+				        	<input ng-model="password" type="password" placeholder="Passowrd" class="form-control"></input>
+				        	<br/>
+				        	<button class="btn btn-default" ng-click="onLoginClick(username, password)">login</button>
+							<button class="btn btn-default" onclick="">register</button>
+						</div>
 			        </script>
 
 			        <script type="text/ng-template" id="accounts.html">
-			        	accounts
-			        </script>
-			        <script type="text/ng-template" id="profile.html">
-			        	profile
+			        	profiles
 			        </script>
 			        <script type="text/ng-template" id="media.html">
-			        	media
+			        	media controls here
 			        </script>
 			    </div>
 
 			</div>
 
 		    <div id="sideBlock">
-		    	<input type="text" id="searchBlock" placeholder="search">
-		    	</input>
-		    </div>
+		    	<input type="text" id="searchBlock" placeholder="search" ng-model="searchText"></input>
+		    	<br/>
+			    <div ng-include="currentPage.strSideUrl"></div>
+			    
+
+		        <script type="text/ng-template" id="sideAccounts.html">
+		        	<ul class="nav">
+				    	<li>
+				    		<a href="" ><b>Your profile</b></a>
+				    	</li>
+				    	<li>
+				    		<a href="" >Other User</a>
+				    	</li>
+				    	<li>
+				    		<a href="" >Other User</a>
+				    	</li>
+			    	</ul>
+		        	
+		        </script>
+		        <script type="text/ng-template" id="sideMedia.html">
+		        	<ul class="nav">
+				    	<li>
+				    		<a href="" ><b>+ Add Item</b></a>
+				    	</li>
+				    	<li ng-repeat="media in mediaData.arrMediaItems | filter:searchText" class="{{isShowing(songID)}}">
+				    		<a class="media" href="" > {{media.strName}} - {{media.arrArtists.join(", ")}} </a>
+				    	</li>
+			    	</ul>
+		        </script>
+
+		  	</div>
 
 		</div>
 	</body>

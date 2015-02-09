@@ -3,12 +3,18 @@ body{
 
 }
 
+a{
+	color: inherit;
+}
+
 #contentsWrapper
 {
-	width: 80%;
+	width: 95%;
 	margin: auto;
 	background-color: #D4FFAA;
-	padding: 5px;
+	padding: .5%;
+	border-radius: 10px;
+	margin-top: 20px;
 }
 #contentsWrapper:after
 {
@@ -18,15 +24,20 @@ body{
 }
 #mainBlock{
 	float: left;
-	width: 75%;
+	width: 65%;
+	border: 2px solid #EEEEEE;
+	border-radius: 9px;
 }
-	#mainContents{
-		width: 100%;
-		min-height: 200px;
-	}
+#mainContents{
+	width: 100%;
+	min-height: 200px;
+	padding: 10px;
+}
+
 #sideBlock{
 	float: left;
-	width: 25%;
+	width: 35%;
+	padding: .5%;
 }
 
 .tabs{
@@ -40,6 +51,15 @@ body{
 	padding: 2px;
 }
 
+.loginBlock{
+	text-align: center;
+}
+
 input#searchBlock{
 	width: 100%;
+	margin-top:2px;
+}
+
+.nav a.media{
+	padding: 5px 10px;
 }

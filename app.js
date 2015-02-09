@@ -10,12 +10,23 @@ var mediaApp = angular.module('mediaApp', []);
 mediaApp.service('userData', function() {
   this.objUsers = {};
 
+  objUser = function(_strUsername, _strPassword){
+    this.strUsername = _strUsername;
+    this.strPassword = _strPassword;
+    this.arrMedia = [];
+  }
+
+  objUser.prototype.funGetMedia = function(){
+      return "Hi"
+  }
+
   this.addUser = function(_strUsername, _strPassword){
     if (!this.objUsers[_strUsername]){
       var useUser = new objUser(_strUsername, _strPassword)
       this.objUsers[_strUsername] = useUser;
     }
   }
+
   this.checkPassword = function (username, password){
     objUser = this.objUsers[username]
     if (objUser && password == objUser.strPassword){
@@ -26,14 +37,7 @@ mediaApp.service('userData', function() {
     }
   }
 
-  objUser = function(_strUsername, _strPassword){
-    this.strUsername = _strUsername;
-    this.strPassword = _strPassword;
-    this.arrMedia = [];
-  }
-  objUser.prototype.funGetMedia = function(){
-      return "shutup"
-  }
+  this.addUser("testing", "123");
 });
 
 
@@ -42,16 +46,15 @@ mediaApp.service('mediaData', function() {
   //this.objCurrMediaItem = null;
   this.arrAlbums = [];
   this.arrMediaItems = [];
-  this.arrGenreOptions = [];
-  this.arrTypeOptions = ["Audio", "Video"];
+  this.objGenres = {} // {name : count} // will increment as media Types are added - can then be added to a drop down hopefully!
+  this.objTypeOptions = { // {name : count} // will increment as media Types are added - can then be added to a drop down hopefully!
+    "Audio" : 0,
+    "Video" : 0
+  };
 
   this.addAlbum = function(_arrArtists, _strName, _strType, _strGenre, _arrMediaItems){
     var albAlbum = new objAlbum(_arrArtists, _strName, _strType, _strGenre, _arrMediaItems)
     this.arrAlbums.push(albAlbum)
-  }
-  this.addMediaItem = function(_arrArtists, _strName, _strType, _strGenre){
-    var medMediaItem = new objMediaItem(_arrArtists, _strName, _strType, _strGenre)
-    this.arrMediaItems.push(medMediaItem)
   }
 
   var objAlbum = function(_arrArtists, _strName, _strType, _strGenre, _arrMediaItems){
@@ -68,35 +71,57 @@ mediaApp.service('mediaData', function() {
     this.strGenre = _strGenre;
   }
 
+  this.addMediaItem = function(_arrArtists, _strName, _strType, _strGenre){
+    var medMediaItem = new objMediaItem(_arrArtists, _strName, _strType, _strGenre)
+    this.arrMediaItems.push(medMediaItem)
+
+    if(!this.objTypeOptions[_strType]){
+      this.objTypeOptions[_strType] = 0
+    }else{
+        this.objTypeOptions[_strType]++
+    }
+    if(!this.objGenres[_strGenre]){
+      this.objGenres[_strGenre] = 0
+    }else{
+        this.objGenres[_strGenre]++
+    }
+  }
+
+  this.addMediaItem(["Curtis Mayfield"], "Move On Up", "Audio", "FUNK")
+  this.addMediaItem(["Groove Armada"], "At the River", "Audio", "Trip Hop")
+  this.addMediaItem(["SL2", "Someone else"], "On a Ragga Tip", "Audio", "Jungle")
+
 });
 
 mediaApp.controller('mediaController', ['$scope', 'userData', 'mediaData',  function ($scope, userData, mediaData) {
 
   $scope.userData = userData;
-  $scope.userData.addUser("testing", "123")
+  $scope.mediaData = mediaData;
 
-  $scope.loginPage = 'login.html'
+  $scope.loginPage = {
+        strTitle: 'Login',
+        strMainUrl: 'login.html',
+        strSideUrl: ''
+      }
   $scope.tabs = [{
-        title: 'Profile',
-        url: 'profile.html'
+        strTitle: 'Accounts',
+        strMainUrl: 'accounts.html',
+        strSideUrl: 'sideAccounts.html'
       }, {
-        title: 'Accounts',
-        url: 'accounts.html'
-      }, {
-        title: 'Media',
-        url: 'media.html'
+        strTitle: 'Media',
+        strMainUrl: 'media.html',
+        strSideUrl: 'sideMedia.html'
       }
   ];
 
   $scope.currentPage = $scope.loginPage;
-  $scope.currUser = null;
+  $scope.currUser = false;
 
   $scope.onClickTab = function (tab) {
-    $scope.showTab(tab.url)
+    $scope.showTab(tab)
    }
-  $scope.showTab = function(url){
-    $scope.currentPage = ($scope.currUser? url : $scope.loginPage);
-    $scope.currentPage = ($scope.currUser? url : "");
+  $scope.showTab = function(tab){
+    $scope.currentPage = ($scope.currUser? tab : $scope.loginPage);
   }
   $scope.isActiveTab = function(tabUrl) {
     return (tabUrl == $scope.currentPage ? "active" : "")
@@ -104,7 +129,7 @@ mediaApp.controller('mediaController', ['$scope', 'userData', 'mediaData',  func
 
   $scope.onLoginClick = function(username, password){
     $scope.currUser = userData.checkPassword(username, password)
-    $scope.showTab('profile.html')
+    $scope.showTab($scope.tabs[0])
   }
 
   $scope.saveUser = function(){
